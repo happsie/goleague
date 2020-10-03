@@ -1,4 +1,4 @@
-module go-league
+module goleague
 
 go 1.15
 

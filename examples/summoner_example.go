@@ -2,26 +2,35 @@ package main
 
 import (
 	"fmt"
-	"go-league/lol"
-	"go-league/lol/config"
+	goleague "goleague"
+	"goleague/riot/config"
 
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	client := lol.NewAPIClient(config.RiotConfig{
+	client := goleague.NewAPIClient(config.RiotConfig{
 		Token:        "API_TOKEN",
-		URL:          "api.riotgames.com/lol",
-		Schema:       "https",
+		URL:          "https://euw1.api.riotgames.com",
 		Region:       "euw1",
 		RetryDelayMS: 5000,
 		Retries:      3,
 	})
 
-	summoner, err := client.Summoner().GetSummoner("Robert Chase")
+	summonerByName, err := client.Summoner().GetSummonerByName("Robert Chase")
 	if err != nil {
-		logrus.Error(err)
-		return
+		logrus.Fatal(err)
 	}
-	fmt.Printf("%+v", summoner)
+	summonerByAccountID, err := client.Summoner().GetSummonerByAccountID(summonerByName.AccountID)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	summonerByPUUID, err := client.Summoner().GetSummonerByPUUID(summonerByAccountID.PUUID)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", summonerByName)
+	fmt.Printf("%+v\n", summonerByAccountID)
+	fmt.Printf("%+v\n", summonerByPUUID)
 }

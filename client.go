@@ -29,3 +29,7 @@ func (c *Client) Summoner() *api.SummonerAPI {
 func (c *Client) Champion() *api.ChampionAPI {
 	return api.NewChampionAPI(c.httpClient)
 }
+
+func (c *Client) League() *api.LeagueAPI {
+	return api.NewLeagueAPI(c.httpClient)
+}

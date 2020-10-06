@@ -9,7 +9,7 @@ import (
 
 func main() {
 	client := goleague.NewAPIClient(config.RiotConfig{
-		Token:        "API_TOKEN",
+		Token:        "RGAPI-f18b65a5-b6c5-4f9a-83fc-a1ecdde52de7",
 		URL:          "https://eun1.api.riotgames.com",
 		Region:       "eun1",
 		RetryDelayMS: 5000,

@@ -30,6 +30,7 @@ func (c *Client) Champion() *api.ChampionAPI {
 	return api.NewChampionAPI(c.httpClient)
 }
 
+// League gives access to the league api (v4)
 func (c *Client) League() *api.LeagueAPI {
 	return api.NewLeagueAPI(c.httpClient)
 }

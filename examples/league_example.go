@@ -16,7 +16,7 @@ func main() {
 		Retries:      3,
 	})
 
-	rankedInfo, err := client.League().GetRankedInfo("MY-JdSQUP_QyQ3oxM669uZi2fBPVWHuNGwq8-lufdU3qNV0")
+	rankedInfo, err := client.League().GetRankedInfo("test123")
 	if err != nil {
 		logrus.Fatal(err)
 	}

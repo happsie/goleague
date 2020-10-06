@@ -24,21 +24,26 @@ type Ranked struct {
 	Veteran bool
 	FreshBlood bool
 	Inactive bool
-	MiniSeries struct {
-		Losses int32
-		Progress string
-		Target int32
-		Wins int32
-	}
+	MiniSeries MiniSeries
 }
 
+type MiniSeries  struct {
+	Losses int32
+	Progress string
+	Target int32
+	Wins int32
+}
+
+// NewLeagueAPI creates a new league api
 func NewLeagueAPI(client *riot.RiotHttpClient) *LeagueAPI {
 	return &LeagueAPI{client:client}
 }
 
-func (api *LeagueAPI) GetRankedInfo(encryptedSummonerID string) (*[]Ranked, error) {
-	rankedInfo := &[]Ranked{}
-	err := api.client.GET(fmt.Sprintf("league/v4/entries/by-summoner/%s", encryptedSummonerID), rankedInfo)
+// GetRankedInfo fetches ranked information from the league endpoint, comes as slice with different queue types
+// Mapped against https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/{encryptedSummonerId}
+func (api *LeagueAPI) GetRankedInfo(encryptedSummonerID string) ([]Ranked, error) {
+	var rankedInfo []Ranked
+	err := api.client.GET(fmt.Sprintf("league/v4/entries/by-summoner/%s", encryptedSummonerID), &rankedInfo)
 	if err != nil {
 		return nil, err
 	}

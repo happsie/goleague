@@ -41,9 +41,9 @@ func NewLeagueAPI(client *riot.RiotHttpClient) *LeagueAPI {
 
 // GetRankedInfo fetches ranked information from the league endpoint, comes as slice with different queue types
 // Mapped against https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/{encryptedSummonerId}
-func (api *LeagueAPI) GetRankedInfo(encryptedSummonerID string) ([]Ranked, error) {
+func (api *LeagueAPI) GetRankedInfo(accountID string) ([]Ranked, error) {
 	var rankedInfo []Ranked
-	err := api.client.GET(fmt.Sprintf("league/v4/entries/by-summoner/%s", encryptedSummonerID), &rankedInfo)
+	err := api.client.GET(fmt.Sprintf("league/v4/entries/by-summoner/%s", accountID), nil, &rankedInfo)
 	if err != nil {
 		return nil, err
 	}

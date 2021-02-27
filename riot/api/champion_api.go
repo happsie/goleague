@@ -23,7 +23,7 @@ func NewChampionAPI(client *riot.RiotHttpClient) *ChampionAPI {
 // this api is mapped aganinst (https://region.api.riotgames.com/lol/platform/v3/champion-rotations)
 func (api *ChampionAPI) GetChampionRotation() (*ChampionRotation, error) {
 	champRotation := &ChampionRotation{}
-	err := api.client.GET("platform/v3/champion-rotations", champRotation)
+	err := api.client.GET("platform/v3/champion-rotations", nil, champRotation)
 	if err != nil {
 		return nil, err
 	}

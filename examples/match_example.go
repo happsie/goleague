@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/Jepzter/goleague"
+	"github.com/Jepzter/goleague/riot/api"
 	"github.com/Jepzter/goleague/riot/config"
-
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,20 +17,16 @@ func main() {
 		Retries:      3,
 	})
 
-	summonerByName, err := client.Summoner().GetSummonerByName("Matt Donovan")
-	if err != nil {
-		logrus.Fatal(err)
-	}
-	summonerByAccountID, err := client.Summoner().GetSummonerByAccountID(summonerByName.AccountID)
-	if err != nil {
-		logrus.Fatal(err)
-	}
-	summonerByPUUID, err := client.Summoner().GetSummonerByPUUID(summonerByAccountID.PUUID)
+	summoner, err := client.Summoner().GetSummonerByName("Matt Donovan")
 	if err != nil {
 		logrus.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", summonerByName)
-	fmt.Printf("%+v\n", summonerByAccountID)
-	fmt.Printf("%+v\n", summonerByPUUID)
+	matchList, err := client.Match().ListMatches(summoner.AccountID, api.Filters{
+		EndIndex:   10,
+	})
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	fmt.Printf("%+v", matchList)
 }

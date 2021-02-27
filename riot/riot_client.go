@@ -30,8 +30,8 @@ func NewRiotHTTPClient(client http.Client, config config.RiotConfig) *RiotHttpCl
 }
 
 // GET performs GET request to Riots API.
-func (c *RiotHttpClient) GET(endpoint string, output interface{}) error {
-	resp, err := c.do(GET, endpoint, nil)
+func (c *RiotHttpClient) GET(endpoint string, queryParameters map[string]interface{}, output interface{}) error {
+	resp, err := c.do(GET, endpoint, queryParameters, nil)
 	if err != nil {
 		return err
 	}
@@ -44,13 +44,18 @@ func (c *RiotHttpClient) GET(endpoint string, output interface{}) error {
 	return nil
 }
 
-func (c *RiotHttpClient) do(method, endpoint string, body io.Reader) (*http.Response, error) {
+func (c *RiotHttpClient) do(method, endpoint string, queryParameters map[string]interface{}, body io.Reader) (*http.Response, error) {
 	url := c.formatEndpoint(endpoint)
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set(TokenHeader, c.Config.Token)
+	query := req.URL.Query()
+	for k, v := range queryParameters {
+		query.Add(k, fmt.Sprintf("%v", v))
+	}
+	req.URL.RawQuery = query.Encode()
 	logrus.Infof("%s: %s", method, url)
 	resp, err := c.HTTP.Do(req)
 	if err != nil {
@@ -74,7 +79,7 @@ func (c *RiotHttpClient) do(method, endpoint string, body io.Reader) (*http.Resp
 		}
 		logrus.Debug("Reached rate-limit. Waiting %i seconds before continuing", seconds)
 		time.Sleep(time.Duration(seconds) * time.Second)
-		return c.do(method, endpoint, body)
+		return c.do(method, endpoint, queryParameters, body)
 	}
 
 	if resp.StatusCode > 299 || resp.StatusCode < 200 {

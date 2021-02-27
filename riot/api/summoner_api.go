@@ -43,7 +43,7 @@ func (api *SummonerAPI) GetSummonerByPUUID(PUUID string) (*Summoner, error) {
 
 func (api *SummonerAPI) getSummoner(endpoint string) (*Summoner, error) {
 	summoner := &Summoner{}
-	err := api.client.GET(endpoint, summoner)
+	err := api.client.GET(endpoint, nil, summoner)
 	if err != nil {
 		return nil, err
 	}

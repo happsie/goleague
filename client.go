@@ -34,3 +34,7 @@ func (c *Client) Champion() *api.ChampionAPI {
 func (c *Client) League() *api.LeagueAPI {
 	return api.NewLeagueAPI(c.httpClient)
 }
+
+func (c *Client) Match() *api.MatchAPI {
+	return api.NewMatchAPI(c.httpClient)
+}

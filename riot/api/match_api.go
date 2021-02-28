@@ -20,6 +20,35 @@ type MatchReference struct {
 	Queue, Champion, Season int
 }
 
+type Match struct {
+	GameID, GameDuration, GameCreation int64
+	QueueID, SeasonID, MapID int
+	GameType, PlatformID, GameVersion, GameMode string
+	ParticipantIdentities []ParticipantIdentities
+	Participants []Participant
+
+}
+
+type ParticipantIdentities struct {
+	ParticipantID int
+	Player Player
+}
+
+type Player struct {
+	ProfileIcon int
+	AccountID, MatchHistoryUri, CurrentAccountID, CurrentPlatformID, SummonerName, SummonerID, PlatformID string
+}
+
+type Participant struct {
+	ParticipantID, ChampionID, TeamID, Spell1ID, Spell2ID int
+	HighestAchievedSeasonTier string
+	Stats ParticipantStats `json:"stats"`
+}
+
+type ParticipantStats struct {
+	Item0, Item1, Item2, Item3, Item4, Item5, Item6, Deaths, Kills, Assists, GoldEarned, ChampLevel, ParticipantID int
+}
+
 type Filters struct {
 	EndIndex, BeginIndex int
 }
@@ -39,4 +68,13 @@ func (api *MatchAPI) ListMatches(accountID string, filters Filters) (MatchList, 
 		return MatchList{}, err
 	}
 	return matchList, nil
+}
+
+func (api *MatchAPI) Match(matchID int64) (Match, error) {
+	var match Match
+	err := api.client.GET(fmt.Sprintf("match/v4/matches/%d", matchID), nil, &match)
+	if err != nil {
+		return Match{}, err
+	}
+	return match, nil
 }

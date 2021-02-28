@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Jepzter/goleague"
 	"github.com/Jepzter/goleague/riot/api"
@@ -23,10 +24,13 @@ func main() {
 	}
 
 	matchList, err := client.Match().ListMatches(summoner.AccountID, api.Filters{
-		EndIndex:   10,
+		EndIndex:   1,
 	})
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	fmt.Printf("%+v", matchList)
+
+	match, err := client.Match().Match(matchList.Matches[0].GameID)
+	b, _ := json.Marshal(match)
+	fmt.Printf("%v", string(b))
 }

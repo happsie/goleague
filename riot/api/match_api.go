@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/Jepzter/goleague/riot"
 )
 
@@ -11,38 +12,37 @@ type MatchAPI struct {
 
 type MatchList struct {
 	StartIndex, TotalGames, EndIndex int
-	Matches []MatchReference `json:"matches"`
+	Matches                          []MatchReference `json:"matches"`
 }
 
 type MatchReference struct {
-	GameID, Timestamp int64
-	Role, PlatformID, Lane string
+	GameID, Timestamp       int64
+	Role, PlatformID, Lane  string
 	Queue, Champion, Season int
 }
 
 type Match struct {
-	GameID, GameDuration, GameCreation int64
-	QueueID, SeasonID, MapID int
+	GameID, GameDuration, GameCreation          int64
+	QueueID, SeasonID, MapID                    int
 	GameType, PlatformID, GameVersion, GameMode string
-	ParticipantIdentities []ParticipantIdentities
-	Participants []Participant
-
+	ParticipantIdentities                       []ParticipantIdentities
+	Participants                                []Participant
 }
 
 type ParticipantIdentities struct {
 	ParticipantID int
-	Player Player
+	Player        Player
 }
 
 type Player struct {
-	ProfileIcon int
+	ProfileIcon                                                                                           int
 	AccountID, MatchHistoryUri, CurrentAccountID, CurrentPlatformID, SummonerName, SummonerID, PlatformID string
 }
 
 type Participant struct {
 	ParticipantID, ChampionID, TeamID, Spell1ID, Spell2ID int
-	HighestAchievedSeasonTier string
-	Stats ParticipantStats `json:"stats"`
+	HighestAchievedSeasonTier                             string
+	Stats                                                 ParticipantStats `json:"stats"`
 }
 
 type ParticipantStats struct {
@@ -54,7 +54,7 @@ type Filters struct {
 }
 
 func NewMatchAPI(client *riot.RiotHttpClient) *MatchAPI {
-	return &MatchAPI{ client: client }
+	return &MatchAPI{client: client}
 }
 
 func (api *MatchAPI) ListMatches(accountID string, filters Filters) (MatchList, error) {
@@ -63,7 +63,7 @@ func (api *MatchAPI) ListMatches(accountID string, filters Filters) (MatchList, 
 	query["endIndex"] = filters.EndIndex
 
 	var matchList MatchList
-	err := api.client.GET(fmt.Sprintf("match/v4/matchlists/by-account/%s", accountID), query, &matchList)
+	err := api.client.GET(fmt.Sprintf("match/v5/matchlists/by-account/%s", accountID), query, &matchList)
 	if err != nil {
 		return MatchList{}, err
 	}
@@ -72,7 +72,7 @@ func (api *MatchAPI) ListMatches(accountID string, filters Filters) (MatchList, 
 
 func (api *MatchAPI) Match(matchID int64) (Match, error) {
 	var match Match
-	err := api.client.GET(fmt.Sprintf("match/v4/matches/%d", matchID), nil, &match)
+	err := api.client.GET(fmt.Sprintf("match/v5/matches/%d", matchID), nil, &match)
 	if err != nil {
 		return Match{}, err
 	}

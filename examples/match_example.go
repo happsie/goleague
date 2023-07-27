@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/Jepzter/goleague"
 	"github.com/Jepzter/goleague/riot/api"
 	"github.com/Jepzter/goleague/riot/config"
@@ -24,7 +25,7 @@ func main() {
 	}
 
 	matchList, err := client.Match().ListMatches(summoner.AccountID, api.Filters{
-		EndIndex:   1,
+		EndIndex: 1,
 	})
 	if err != nil {
 		logrus.Fatal(err)
